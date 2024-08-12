@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <style>
+        .choice_select {
+            width: 300px;
+        }
+    </style>
+    <h3>Text to speech</h3>
+    <textarea placeholder="Write anything here..."></textarea>
+    <div class="row">
+        <select class="choice_select"></select>
+        <button><i class="fa-solid fa-play"></i>Listen</button>
+    </div>
+
+    <script>
+        let speech = new SpeechSynthesisUtterance()
+        let voices = []
+        let voiceSelect = document.querySelector('select')
+        window.speechSynthesis.onvoiceschanged = () => {
+            voices = window.speechSynthesis.getVoices()
+            speech.voice = voices[0]
+
+            voices.forEach((voice, i) => (voiceSelect.options[i] = new Option(voice.name , i)))
+        }
+
+        voiceSelect.addEventListener('change' , () => {
+             speech.voice = voices[voiceSelect.value]
+        })
+        // Speech 
+        document.querySelector('button').addEventListener('click', () => {
+                speech.text = document.querySelector('textarea').value
+                window.speechSynthesis.speak(speech)
+        })
+
+        /*
+        - SpeechSynthesisUtterance : là một phần của API Web Speech, cho phép bạn sử dụng tính năng chuyển văn bản thành giọng nói 
+        - speechSynthesis.speak : là một phương thức thuộc API Web Speech trong JavaScript
+        - getVoices() : giúp bạn lấy danh sách tất cả các giọng đọc mà trình duyệt hỗ trợ
+        - onvoiceschanged : giúp đảm bảo rằng ứng dụng của bạn luôn có danh sách giọng đọc đầy đủ và chính xác
+        */
+    </script>
+</body>
+</html>
